@@ -1,4 +1,4 @@
-import uuid
+import datetime
 
 from django.test import TestCase
 
@@ -17,14 +17,18 @@ class RawActionTest(TestCase):
 		cls.user = get_user_model().objects.create(username='abc')
 	
 	def setUp(self):
+		self.time_before = datetime.datetime.now()
 		self.action = RawAction.objects.create(
 			session_key='12345',
 			user=self.user,
 			)
+		self.time_after = datetime.datetime.now()
 	
 	def test_fields(self):
 		self.assertEquals(self.action.user, self.user)
 		self.assertIsNotNone(self.action.session_key)
+		self.assertGreater(self.action.timestamp, self.time_before)
+		self.assertLess(self.action.timestamp, self.time_after)
 	
 	def test_properties(self):
 		self.assertEquals(self.action.user_id, self.user.id)
