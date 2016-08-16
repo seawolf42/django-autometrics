@@ -4,6 +4,7 @@ from django.test import TestCase
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 
 from .models import RawAction
 
@@ -19,6 +20,11 @@ class RawActionTest(TestCase):
 	
 	def test_properties(self):
 		self.assertIsNone(self.action.user_id)
+	
+	def test_session_key_is_not_nullable(self):
+		self.action.session_key = None
+		with self.assertRaises(IntegrityError):
+			self.action.save()
 	
 	def test_set_user(self):
 		self.action.user = self.user
