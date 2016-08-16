@@ -21,6 +21,7 @@ class RawActionTest(TestCase):
 		self.action = RawAction.objects.create(
 			session_key='12345',
 			user=self.user,
+			action='blah',
 			)
 		self.time_after = datetime.datetime.now()
 	
@@ -29,6 +30,7 @@ class RawActionTest(TestCase):
 		self.assertIsNotNone(self.action.session_key)
 		self.assertGreater(self.action.timestamp, self.time_before)
 		self.assertLess(self.action.timestamp, self.time_after)
+		self.assertIsNotNone(self.action.action)
 	
 	def test_properties(self):
 		self.assertEquals(self.action.user_id, self.user.id)
@@ -41,3 +43,8 @@ class RawActionTest(TestCase):
 	def test_user_is_nullable(self):
 		self.action.user = None
 		self.action.save()
+	
+	def test_action_is_not_nullable(self):
+		self.action.action = None
+		with self.assertRaises(IntegrityError):
+			self.action.save()
