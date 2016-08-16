@@ -13,20 +13,23 @@ class RawActionTest(TestCase):
 	
 	def setUp(self):
 		self.user = get_user_model().objects.create(username='abc')
-		self.action = RawAction.objects.create()
+		self.action = RawAction.objects.create(
+			session_key='12345',
+			user=self.user,
+			)
 	
 	def test_fields(self):
-		self.assertIsNone(self.action.user)
+		self.assertEquals(self.action.user, self.user)
+		self.assertIsNotNone(self.action.session_key)
 	
 	def test_properties(self):
-		self.assertIsNone(self.action.user_id)
+		self.assertEquals(self.action.user_id, self.user.id)
 	
 	def test_session_key_is_not_nullable(self):
 		self.action.session_key = None
 		with self.assertRaises(IntegrityError):
 			self.action.save()
 	
-	def test_set_user(self):
-		self.action.user = self.user
+	def test_user_is_nullable(self):
+		self.action.user = None
 		self.action.save()
-		self.assertEquals(self.action.user_id, self.user.id)
