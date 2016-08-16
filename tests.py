@@ -11,8 +11,12 @@ from .models import RawAction
 
 class RawActionTest(TestCase):
 	
+	@classmethod
+	def setUpClass(cls):
+		super(RawActionTest, cls).setUpClass()
+		cls.user = get_user_model().objects.create(username='abc')
+	
 	def setUp(self):
-		self.user = get_user_model().objects.create(username='abc')
 		self.action = RawAction.objects.create(
 			session_key='12345',
 			user=self.user,
