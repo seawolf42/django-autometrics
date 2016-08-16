@@ -11,10 +11,16 @@ from .models import RawAction
 class RawActionTest(TestCase):
 	
 	def setUp(self):
+		self.user = get_user_model().objects.create(username='abc')
 		self.action = RawAction.objects.create()
 	
 	def test_fields(self):
-		pass
+		self.assertIsNone(self.action.user)
 	
 	def test_properties(self):
-		pass
+		self.assertIsNone(self.action.user_id)
+	
+	def test_set_user(self):
+		self.action.user = self.user
+		self.action.save()
+		self.assertEquals(self.action.user_id, self.user.id)

@@ -11,4 +11,5 @@ log = logging.getLogger(__name__)
 
 
 class RawAction(models.Model):
-	pass
+	
+	user = models.ForeignKey(User, null=True)
