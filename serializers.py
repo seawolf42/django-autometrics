@@ -1,3 +1,5 @@
 from rest_framework import serializers
 
-import validators
+
+class ActionSerializer(serializers.Serializer):
+    pass
