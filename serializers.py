@@ -1,5 +1,5 @@
 from rest_framework import serializers
 
 
-class ActionSerializer(serializers.Serializer):
+class AccessSerializer(serializers.Serializer):
     pass

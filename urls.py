@@ -1,5 +1,5 @@
-from .views import ActionViewSet
+from .views import AccessViewSet
 
 
 def register(router):
-    router.register(r'actions', ActionViewSet, base_name='action')
+    router.register(r'access', AccessViewSet, base_name='access')
