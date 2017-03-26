@@ -12,7 +12,7 @@ class Access(models.Model):
 
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
 
-    session_key = models.TextField(editable=False)
+    session_key = models.CharField(max_length=100, editable=False)
     user = models.ForeignKey(User, null=True, editable=False)
 
     action = models.CharField(max_length=100, editable=False)
