@@ -1,7 +1,5 @@
-import datetime
 import logging
 
-from django.contrib.auth.models import AnonymousUser
 from django.db import models
 
 from accounts.models import User
@@ -10,26 +8,13 @@ from accounts.models import User
 log = logging.getLogger(__name__)
 
 
-class AccessManager(models.Manager):
-
-    def record(self, session_key, user, action):
-        if isinstance(user, AnonymousUser):
-            user = None
-        return Access.objects.create(
-            timestamp=datetime.datetime.now(),
-            session_key=session_key,
-            user=user if user else None,
-            action=action,
-        )
-
-
 class Access(models.Model):
 
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
 
-    session_key = models.CharField(max_length=100, editable=False)
+    session_key = models.TextField(editable=False)
     user = models.ForeignKey(User, null=True, editable=False)
 
     action = models.CharField(max_length=100, editable=False)
 
-    objects = AccessManager()
+    resource = models.CharField(max_length=500, editable=False)

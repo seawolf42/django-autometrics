@@ -3,7 +3,11 @@ import datetime
 from django.test import TestCase
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
 from django.db import IntegrityError
+from django.test.client import Client
+
+from .functions import access_entity
 
 from .models import Access
 
@@ -20,7 +24,8 @@ class AccessTest(TestCase):
         self.access = Access.objects.create(
             session_key='12345',
             user=self.user,
-            action='blah',
+            action='action',
+            resource='resource'
             )
         self.time_after = datetime.datetime.now()
 
@@ -30,6 +35,7 @@ class AccessTest(TestCase):
         self.assertGreater(self.access.timestamp, self.time_before)
         self.assertLess(self.access.timestamp, self.time_after)
         self.assertIsNotNone(self.access.action)
+        self.assertIsNotNone(self.access.resource)
 
     def test_properties(self):
         self.assertEquals(self.access.user_id, self.user.id)
