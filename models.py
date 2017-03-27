@@ -18,3 +18,6 @@ class Access(models.Model):
     action = models.CharField(max_length=100, editable=False)
 
     resource = models.CharField(max_length=500, editable=False)
+
+    class Meta:
+        app_label = 'metrics'
