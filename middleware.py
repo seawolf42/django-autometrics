@@ -7,17 +7,14 @@ class UserSessionTrackingMiddleware(object):
 
     def process_response(self, request, response):
         print 'RESPONSE ->',
-        try:
+        if hasattr(request, 'user'):
             request_key = request.pmetrics_key
-        except AttributeError:
-            request_key = None
-        try:
             if request.session.session_key is None:
                 request.session.cycle_key()
             response_key = request.session.session_key
-        except AttributeError:
-            response_key = None
-        print 'KEY:', response_key,
-        print 'CHANGED:', request_key != response_key,
-        print 'USER:', request.user if hasattr(request, 'user') else None
+            print 'KEY:', response_key,
+            print 'CHANGED:', request_key != response_key,
+            print 'USER:', request.user if hasattr(request, 'user') else None
+        else:
+            print 'STATUS:', response.status_code
         return response
