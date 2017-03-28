@@ -1,14 +1,25 @@
 import logging
 
+from django.contrib.auth.signals import user_logged_in
+from django.contrib.sessions.models import Session
 from django.db import models
 
 from accounts.models import User
+
+import settings
 
 
 log = logging.getLogger(__name__)
 
 
-class Access(models.Model):
+class MetricsModel(models.Model):
+
+    class Meta:
+        app_label = 'metrics'
+        abstract = True
+
+
+class Access(MetricsModel):
 
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
 
@@ -19,5 +30,15 @@ class Access(models.Model):
 
     resource = models.CharField(max_length=500, editable=False)
 
-    class Meta:
-        app_label = 'metrics'
+
+class UserSession(MetricsModel):
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    session = models.ForeignKey(Session)
+
+
+def user_logged_in_handler(sender, request, user, **kwargs):
+    UserSession.objects.get_or_create(user=user, session_id=request.session.session_key)
+
+
+user_logged_in.connect(user_logged_in_handler)
