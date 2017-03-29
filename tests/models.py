@@ -7,6 +7,7 @@ from django.db import IntegrityError
 from django.test.client import Client
 
 from ..models import Access
+from ..models import UserSession
 
 
 class AccessTest(TestCase):
@@ -26,7 +27,7 @@ class AccessTest(TestCase):
             )
         self.time_after = datetime.datetime.now()
 
-    def test_fields(self):
+    def test_default_fields(self):
         self.assertEquals(self.access.user, self.user)
         self.assertIsNotNone(self.access.session_key)
         self.assertGreater(self.access.timestamp, self.time_before)
@@ -50,3 +51,19 @@ class AccessTest(TestCase):
         self.access.action = None
         with self.assertRaises(IntegrityError):
             self.access.save()
+
+
+class UserSessionTest(TestCase):
+
+    def setUp(self):
+        self.user = get_user_model().objects.create(username='user')
+        self.session = Client().session
+        self.session_key = self.session.session_key
+        self.user_session = UserSession.objects.create(
+            user=self.user,
+            session_id=self.session_key,
+            )
+
+    def test_default_fields(self):
+        self.assertEquals(self.user_session.user, self.user)
+        self.assertEquals(self.user_session.session_id, self.session_key)
