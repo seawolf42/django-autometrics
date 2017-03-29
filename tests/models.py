@@ -7,9 +7,9 @@ from django.contrib.auth.models import AnonymousUser
 from django.db import IntegrityError
 from django.test.client import Client
 
-from .functions import access_entity
+from ..functions import access_entity
 
-from .models import Access
+from ..models import Access
 
 
 class AccessTest(TestCase):
@@ -17,7 +17,7 @@ class AccessTest(TestCase):
     @classmethod
     def setUpClass(cls):
         super(AccessTest, cls).setUpClass()
-        cls.user = get_user_model().objects.create(username='abc')
+        cls.user = get_user_model().objects.create(username='user')
 
     def setUp(self):
         self.time_before = datetime.datetime.now()
@@ -58,7 +58,7 @@ class AccessTest(TestCase):
 class AccessEntityTest(TestCase):
 
     def setUp(self):
-        self.entity = get_user_model().objects.create(username='abc')
+        self.entity = get_user_model().objects.create(username='entity')
         self.session = Client().session
 
     def _test_access_state(self, expected_user):
