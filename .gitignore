@@ -2,3 +2,4 @@
 .storage
 .eggs
 *.egg-info
+dist
