@@ -27,7 +27,10 @@ class AccessEntityTest(TestCase):
         self.assertEqual(access.session_key, self.session.session_key)
         self.assertEqual(access.user, expected_user)
         self.assertEqual(access.action, 'access')
-        self.assertEqual(access.resource, '{0}:{1}'.format(self.entity._meta.db_table, self.entity.pk))
+        self.assertEqual(access.resource, '{0}:{1}'.format(
+            self.entity._meta.db_table,
+            self.entity.pk,
+            ))
 
     def test_access_entity(self):
         self.user = get_user_model().objects.create(username='user')
