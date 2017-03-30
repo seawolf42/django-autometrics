@@ -1,6 +1,9 @@
 import os
+import subprocess
+import sys
 
 from setuptools import find_packages, setup
+from setuptools.command.test import test as TestCommand
 
 
 with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
@@ -8,6 +11,23 @@ with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
 
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
+
+
+class DjangoTestAndLint(TestCommand):
+
+    description = 'run linters and tests'
+    user_options = []
+
+    def run_tests(self):
+        self._run(['flake8', 'djangae_rest_autometrics', 'setup.py'])
+        self._run(['python', 'manage.py', 'test'])
+
+    def _run(self, command):
+        try:
+            subprocess.check_call(command)
+        except subprocess.CalledProcessError as error:
+            print('Command failed with exit code', error.returncode)
+            sys.exit(error.returncode)
 
 
 setup(
@@ -37,4 +57,10 @@ setup(
         'djangae>=0.9.8',
         # 'djangorestframework',
     ],
+    tests_require=[
+        'flake8',
+    ],
+    cmdclass={
+        'test': DjangoTestAndLint,
+    },
 )
