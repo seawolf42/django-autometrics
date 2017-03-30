@@ -25,7 +25,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
 
-    'djangae_rest_autometrics',
+    'autometricsnonrel',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -33,7 +33,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'djangae_rest_autometrics.middleware.UserSessionTrackingMiddleware',
+    'autometricsnonrel.middleware.UserSessionTrackingMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )

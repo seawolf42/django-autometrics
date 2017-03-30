@@ -1,4 +1,4 @@
-application: djangae-rest-autometrics
+application: nonrel-autometrics
 service: default
 version: metrics
 runtime: python27

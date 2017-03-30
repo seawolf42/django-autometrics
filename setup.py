@@ -19,7 +19,7 @@ class DjangoTestAndLint(TestCommand):
     user_options = []
 
     def run_tests(self):
-        self._run(['flake8', 'djangae_rest_autometrics', 'setup.py'])
+        self._run(['flake8', 'autometricsnonrel', 'setup.py'])
         self._run(['python', 'manage.py', 'test'])
 
     def _run(self, command):
@@ -31,7 +31,7 @@ class DjangoTestAndLint(TestCommand):
 
 
 setup(
-    name='djangae-rest-autometrics',
+    name='django-autometrics-nonrel',
     version='0.1',
     packages=find_packages(),
     include_package_data=True,
@@ -55,7 +55,6 @@ setup(
     install_requires=[
         'Django>=1.8,<1.9',
         'djangae>=0.9.8',
-        # 'djangorestframework',
     ],
     tests_require=[
         'flake8',

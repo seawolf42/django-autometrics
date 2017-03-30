@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 class MetricsModel(models.Model):
 
     class Meta:
-        app_label = 'djangae_rest_autometrics'
+        app_label = 'autometricsnonrel'
         abstract = True
 
 
