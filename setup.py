@@ -58,6 +58,7 @@ setup(
     ],
     tests_require=[
         'flake8',
+        'mock',
     ],
     cmdclass={
         'test': DjangoTestAndLint,

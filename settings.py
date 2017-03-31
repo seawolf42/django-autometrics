@@ -1,5 +1,12 @@
 from djangae.settings_base import *  # noqa
 
+import logging
+import sys
+
+
+if sys.argv[1] == 'test':
+    logging.disable(logging.CRITICAL)
+
 
 SECRET_KEY = 'gh30b@s+meh9fusgy_&wt=m-wxu!-e75icg-=0y2ywle4@0ees'
 

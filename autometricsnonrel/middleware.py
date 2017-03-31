@@ -24,7 +24,7 @@ class UserSessionTrackingMiddleware(object):
                     'user {0} session key changed from {1}... to {2}'.format(
                         request.user,
                         request_key[:5] if request_key else '<none>',
-                        response_key[:5],
+                        response_key[:5] if response_key else '<none>',
                     )
                 )
         return response

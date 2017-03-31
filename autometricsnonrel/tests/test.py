@@ -1,3 +1,4 @@
-from .functions import *     # noqa
-from .models import *        # noqa
-from .signals import *       # noqa
+from .functions import *  # noqa
+from .middleware import *  # noqa
+from .models import *  # noqa
+from .signals import *  # noqa
