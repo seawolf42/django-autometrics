@@ -19,4 +19,4 @@ class UserLoggedInTest(TestCase):
         self.assertEqual(UserSession.objects.count(), 1)
         user_session = UserSession.objects.get()
         self.assertEqual(user_session.user, user)
-        self.assertEqual(user_session.session_id, request.session.session_key)
+        self.assertEqual(user_session.session, request.session.session_key)
