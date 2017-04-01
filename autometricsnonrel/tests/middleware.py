@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.test.client import Client
 
 from ..middleware import UserSessionTrackingMiddleware
+from ..models import UserSession
 
 
 log = logging.getLogger()
@@ -73,5 +74,11 @@ class UserSessionTrackingResponseTest(UserSessionTrackingMiddlewareBaseTest):
             self.request.pmetrics_key,
             self.session.session_key,
             )
+        UserSession.objects.create = mock.MagicMock()
         self.middleware.process_response(self.request, None)
         self.request.session.cycle_key.assert_not_called()
+        UserSession.objects.create.assert_called_with(
+            session=self.request.pmetrics_key,
+            user=self.request.user,
+            previous=self.request.session.session_key,
+        )
