@@ -23,7 +23,7 @@ class Access(MetricsModel):
 
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
 
-    session_key = models.CharField(max_length=100, editable=False)
+    session_key = models.CharField(max_length=40, editable=False)
     user = models.ForeignKey(USER_MODEL, null=True, editable=False)
 
     action = models.CharField(max_length=100, editable=False)
