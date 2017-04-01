@@ -2,7 +2,6 @@ import logging
 
 from django.contrib.auth.models import User
 from django.contrib.auth.signals import user_logged_in
-from django.contrib.sessions.models import Session
 from django.db import models
 
 import settings
@@ -34,14 +33,15 @@ class Access(MetricsModel):
 
 class UserSession(MetricsModel):
 
+    session = models.CharField(max_length=40, primary_key=True)
     user = models.ForeignKey(USER_MODEL)
-    session = models.ForeignKey(Session)
+    previous = models.ForeignKey('UserSession', null=True)
 
 
 def user_logged_in_handler(sender, request, user, **kwargs):
     UserSession.objects.get_or_create(
         user=user,
-        session_id=request.session.session_key,
+        session=request.session.session_key,
         )
 
 

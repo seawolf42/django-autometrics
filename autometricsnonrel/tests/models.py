@@ -28,7 +28,7 @@ class AccessTest(TestCase):
         self.time_after = datetime.datetime.now()
 
     def test_default_fields(self):
-        self.assertEquals(self.access.user, self.user)
+        self.assertEqual(self.access.user, self.user)
         self.assertIsNotNone(self.access.session_key)
         self.assertGreater(self.access.timestamp, self.time_before)
         self.assertLess(self.access.timestamp, self.time_after)
@@ -60,10 +60,24 @@ class UserSessionTest(TestCase):
         self.session = Client().session
         self.session_key = self.session.session_key
         self.user_session = UserSession.objects.create(
+            session=self.session_key,
             user=self.user,
-            session_id=self.session_key,
             )
 
     def test_default_fields(self):
-        self.assertEquals(self.user_session.user, self.user)
-        self.assertEquals(self.user_session.session_id, self.session_key)
+        self.assertEqual(self.user_session.session, self.session_key)
+        self.assertEqual(self.user_session.user, self.user)
+        self.assertIsNone(self.user_session.previous)
+
+    def test_foreign_key_relationship(self):
+        session_2 = Client().session
+        UserSession.objects.create(
+            session=session_2.session_key,
+            user=self.user,
+            previous=self.user_session,
+        )
+        self.assertEqual(UserSession.objects.count(), 2)
+        self.assertEqual(
+            UserSession.objects.get(previous=self.session_key).previous,
+            self.user_session,
+            )
