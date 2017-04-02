@@ -83,17 +83,17 @@ class UserSessionTest(TestCase):
             self.user_session,
             )
 
-    def test_save_walks_tree(self):
-        self.user_session.set_parentage = mock.MagicMock()
+    def test_save_sets_ancestors(self):
+        self.user_session.set_ancestors_user = mock.MagicMock()
         self.user_session.save()
-        self.user_session.set_parentage.assert_called_once()
+        self.user_session.set_ancestors_user.assert_called_once()
 
-    def test_save_skips_walk_if_param_set_parent(self):
-        self.user_session.set_parentage = mock.MagicMock()
-        self.user_session.save(set_parentage=False)
-        self.user_session.set_parentage.assert_not_called()
+    def test_save_skips_set_ancestors_if_param_unset(self):
+        self.user_session.set_ancestors_user = mock.MagicMock()
+        self.user_session.save(set_ancestors_user=False)
+        self.user_session.set_ancestors_user.assert_not_called()
 
-    def test_set_parentage_walks_up_hierarchy(self):
+    def test_set_ancestors_walks_up_parent_list(self):
         next_session = self.user_session
         for i in range(3):
             next_session = UserSession.objects.create(
@@ -106,7 +106,7 @@ class UserSessionTest(TestCase):
         last_session.save()
         self.assertEqual(UserSession.objects.filter(user=None).count(), 0)
 
-    def test_set_parentage_stops_if_parent_user_is_not_none(self):
+    def test_set_ancestors_stops_if_parent_user_is_not_none(self):
         next_session = self.user_session
         for i in range(3):
             next_session = UserSession.objects.create(
@@ -116,7 +116,7 @@ class UserSessionTest(TestCase):
         self.user_session.user = get_user_model().objects.create(
             username='user2',
             )
-        self.user_session.save(set_parentage=False)
+        self.user_session.save(set_ancestors_user=False)
         last_session = next_session
         self.assertEqual(UserSession.objects.filter(user=None).count(), 3)
         last_session.user = self.user
