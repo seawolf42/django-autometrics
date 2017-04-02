@@ -83,6 +83,16 @@ class UserSessionTest(TestCase):
             self.user_session,
             )
 
+    def test_save_walks_tree(self):
+        self.user_session.set_parentage = mock.MagicMock()
+        self.user_session.save()
+        self.user_session.set_parentage.assert_called_once()
+
+    def test_save_skips_walk_if_param_set_parent(self):
+        self.user_session.set_parentage = mock.MagicMock()
+        self.user_session.save(set_parentage=False)
+        self.user_session.set_parentage.assert_not_called()
+
     def test_set_parentage_walks_up_hierarchy(self):
         next_session = self.user_session
         for i in range(3):

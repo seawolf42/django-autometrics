@@ -37,6 +37,10 @@ class UserSession(MetricsModel):
     user = models.ForeignKey(USER_MODEL, null=True)
     previous = models.ForeignKey('UserSession', null=True)
 
+    def save(self, set_parentage=True, *args, **kwargs):
+        super(UserSession, self).save(*args, **kwargs)
+        if set_parentage:
+            self.set_parentage(self.previous)
 
     def set_parentage(self, parent):
         while (
@@ -47,6 +51,7 @@ class UserSession(MetricsModel):
             parent.user = self.user
             parent.save(set_parentage=False)
             parent = parent.previous
+
 
 def user_logged_in_handler(sender, request, user, **kwargs):
     UserSession.objects.get_or_create(
