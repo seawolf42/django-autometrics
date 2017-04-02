@@ -29,9 +29,19 @@ class UserSessionTrackingMiddleware(object):
                         response_key[:5] if response_key else '<none>',
                     )
                 )
-                UserSession.objects.create(
-                    session=request_key,
-                    user=request.user,
-                    previous=response_key,
-                )
+                if UserSession.objects.filter(
+                        session=request_key
+                        ).count() == 0:
+                    if UserSession.objects.filter(
+                            session=response_key
+                            ).count() == 0:
+                        response_key = None
+                    request_user = (
+                        None if request.user.is_anonymous() else request.user
+                    )
+                    UserSession.objects.create(
+                        session=request_key,
+                        user=request_user,
+                        previous_id=response_key,
+                    )
         return response

@@ -61,12 +61,11 @@ class UserSessionTest(TestCase):
         self.session_key = self.session.session_key
         self.user_session = UserSession.objects.create(
             session=self.session_key,
-            user=self.user,
             )
 
     def test_default_fields(self):
         self.assertEqual(self.user_session.session, self.session_key)
-        self.assertEqual(self.user_session.user, self.user)
+        self.assertIsNone(self.user_session.user)
         self.assertIsNone(self.user_session.previous)
 
     def test_foreign_key_relationship(self):

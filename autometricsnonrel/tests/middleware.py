@@ -4,6 +4,9 @@ import logging
 import mock
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.signals import user_logged_in
+from django.test import RequestFactory
 from django.test.client import Client
 
 from ..middleware import UserSessionTrackingMiddleware
@@ -57,6 +60,15 @@ class UserSessionTrackingResponseTest(UserSessionTrackingMiddlewareBaseTest):
         del self.request.user
         self.middleware.process_response(self.request, None)
 
+    def test_response_with_anonymous_user_passes(self):
+        self.request.user = AnonymousUser()
+        self.middleware.process_response(self.request, None)
+
+    def test_response_with_anonymous_user_and_changed_session_passes(self):
+        self.request.user = AnonymousUser()
+        self.request.pmetrics_key = 'abc'
+        self.middleware.process_response(self.request, None)
+
     def test_response_with_no_request_session_key_cycles_key(self):
         self.request.session = mock.MagicMock()
         self.request.session.session_key = None
@@ -69,6 +81,7 @@ class UserSessionTrackingResponseTest(UserSessionTrackingMiddlewareBaseTest):
         self.request.session.cycle_key.assert_not_called()
 
     def test_response_with_changed_session_passes(self):
+        UserSession.objects.create(session=self.session_key)
         self.request.pmetrics_key = self.session_key[::-1]
         self.assertNotEqual(
             self.request.pmetrics_key,
@@ -80,5 +93,29 @@ class UserSessionTrackingResponseTest(UserSessionTrackingMiddlewareBaseTest):
         UserSession.objects.create.assert_called_with(
             session=self.request.pmetrics_key,
             user=self.request.user,
-            previous=self.request.session.session_key,
+            previous_id=self.request.session.session_key,
         )
+
+
+class MiddlewareWithLoginSignalLoggedInTest(TestCase):
+
+    def setUp(self):
+        self.request = RequestFactory().get('/')
+        self.middleware = UserSessionTrackingMiddleware()
+        self.user = get_user_model().objects.create(username='user')
+
+    def test_user_session_not_duplicated_by_middleware(self):
+        self.request.session = Client().session
+        UserSession.objects.create(session=self.request.session.session_key)
+        self.assertEqual(UserSession.objects.count(), 1)
+        self.request.user = self.user
+        self.middleware.process_request(self.request)
+        self.request.session.cycle_key()
+        user_logged_in.send(
+            sender=self.__class__,
+            request=self.request,
+            user=self.user,
+            )
+        self.assertEqual(UserSession.objects.count(), 2)
+        self.middleware.process_response(self.request, None)
+        self.assertEqual(UserSession.objects.count(), 2)
