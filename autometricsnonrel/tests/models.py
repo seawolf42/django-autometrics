@@ -66,6 +66,7 @@ class UserSessionTest(TestCase):
             )
 
     def test_default_fields(self):
+        self.assertIsNotNone(self.user_session.created)
         self.assertEqual(self.user_session.session, self.session_key)
         self.assertIsNone(self.user_session.user)
         self.assertIsNone(self.user_session.previous)

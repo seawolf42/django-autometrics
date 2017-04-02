@@ -34,8 +34,9 @@ class Access(MetricsModel):
 class UserSession(MetricsModel):
 
     session = models.CharField(max_length=40, primary_key=True)
-    user = models.ForeignKey(USER_MODEL, null=True)
-    previous = models.ForeignKey('UserSession', null=True)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    user = models.ForeignKey(USER_MODEL, null=True, editable=False)
+    previous = models.ForeignKey('UserSession', null=True, editable=False)
 
     def save(self, set_ancestors_user=True, *args, **kwargs):
         super(UserSession, self).save(*args, **kwargs)
