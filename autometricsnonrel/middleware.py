@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 class UserSessionTrackingMiddleware(object):
 
     def process_request(self, request):
-        request.pmetrics_key = (
+        request.autometrics_key = (
             request.session.session_key
             if hasattr(request, 'session')
             else None
@@ -17,7 +17,7 @@ class UserSessionTrackingMiddleware(object):
 
     def process_response(self, request, response):
         if hasattr(request, 'user'):
-            request_key = request.pmetrics_key
+            request_key = request.autometrics_key
             if request.session.session_key is None:
                 request.session.cycle_key()
             response_key = request.session.session_key

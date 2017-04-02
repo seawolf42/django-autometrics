@@ -37,15 +37,15 @@ class UserSessionTrackingMiddlewareBaseTest(TestCase):
 
 class UserSessionTrackingRequestTest(UserSessionTrackingMiddlewareBaseTest):
 
-    def test_request_with_no_session_sets_pmetrics_key_none(self):
+    def test_request_with_no_session_sets_autometrics_key_none(self):
         self.assertFalse(hasattr(self.request, 'session'))
         self.middleware.process_request(self.request)
-        self.assertIsNone(self.request.pmetrics_key)
+        self.assertIsNone(self.request.autometrics_key)
 
-    def test_request_with_session_sets_pmetrics_key_to_session_key(self):
+    def test_request_with_session_sets_autometrics_key_to_session_key(self):
         self.request.session = self.session
         self.middleware.process_request(self.request)
-        self.assertEqual(self.request.pmetrics_key, self.session_key)
+        self.assertEqual(self.request.autometrics_key, self.session_key)
 
 
 class UserSessionTrackingResponseTest(UserSessionTrackingMiddlewareBaseTest):
@@ -54,7 +54,7 @@ class UserSessionTrackingResponseTest(UserSessionTrackingMiddlewareBaseTest):
         super(UserSessionTrackingResponseTest, self).setUp()
         self.request.session = self.session
         self.request.session.cycle_key = mock.MagicMock(return_value=None)
-        self.request.pmetrics_key = self.session_key
+        self.request.autometrics_key = self.session_key
 
     def test_response_with_user_none_passes(self):
         del self.request.user
@@ -66,7 +66,7 @@ class UserSessionTrackingResponseTest(UserSessionTrackingMiddlewareBaseTest):
 
     def test_response_with_anonymous_user_and_changed_session_passes(self):
         self.request.user = AnonymousUser()
-        self.request.pmetrics_key = 'abc'
+        self.request.autometrics_key = 'abc'
         self.middleware.process_response(self.request, None)
 
     def test_response_with_no_request_session_key_cycles_key(self):
@@ -76,22 +76,22 @@ class UserSessionTrackingResponseTest(UserSessionTrackingMiddlewareBaseTest):
         self.request.session.cycle_key.assert_called_once()
 
     def test_response_with_unchanged_session_passes(self):
-        self.request.pmetrics_key = self.session_key
+        self.request.autometrics_key = self.session_key
         self.middleware.process_response(self.request, None)
         self.request.session.cycle_key.assert_not_called()
 
     def test_response_with_changed_session_passes(self):
         UserSession.objects.create(session=self.session_key)
-        self.request.pmetrics_key = self.session_key[::-1]
+        self.request.autometrics_key = self.session_key[::-1]
         self.assertNotEqual(
-            self.request.pmetrics_key,
+            self.request.autometrics_key,
             self.session.session_key,
             )
         UserSession.objects.create = mock.MagicMock()
         self.middleware.process_response(self.request, None)
         self.request.session.cycle_key.assert_not_called()
         UserSession.objects.create.assert_called_with(
-            session=self.request.pmetrics_key,
+            session=self.request.autometrics_key,
             user=self.request.user,
             previous_id=self.request.session.session_key,
         )
