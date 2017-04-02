@@ -34,7 +34,7 @@ class Access(MetricsModel):
 class UserSession(MetricsModel):
 
     session = models.CharField(max_length=40, primary_key=True)
-    user = models.ForeignKey(USER_MODEL)
+    user = models.ForeignKey(USER_MODEL, null=True)
     previous = models.ForeignKey('UserSession', null=True)
 
 

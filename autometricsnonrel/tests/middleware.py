@@ -4,6 +4,7 @@ import logging
 import mock
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
 from django.test.client import Client
 
 from ..middleware import UserSessionTrackingMiddleware
@@ -55,6 +56,15 @@ class UserSessionTrackingResponseTest(UserSessionTrackingMiddlewareBaseTest):
 
     def test_response_with_user_none_passes(self):
         del self.request.user
+        self.middleware.process_response(self.request, None)
+
+    def test_response_with_anonymous_user_passes(self):
+        self.request.user = AnonymousUser()
+        self.middleware.process_response(self.request, None)
+
+    def test_response_with_anonymous_user_and_changed_session_passes(self):
+        self.request.user = AnonymousUser()
+        self.request.pmetrics_key = 'abc'
         self.middleware.process_response(self.request, None)
 
     def test_response_with_no_request_session_key_cycles_key(self):
