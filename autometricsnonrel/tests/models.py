@@ -1,5 +1,7 @@
 import datetime
 
+import mock
+
 from django.test import TestCase
 
 from django.contrib.auth import get_user_model
@@ -80,3 +82,33 @@ class UserSessionTest(TestCase):
             UserSession.objects.get(previous=self.session_key).previous,
             self.user_session,
             )
+
+    def test_set_parentage_walks_up_hierarchy(self):
+        next_session = self.user_session
+        for i in range(3):
+            next_session = UserSession.objects.create(
+                session=Client().session.session_key,
+                previous=next_session,
+            )
+        last_session = next_session
+        self.assertEqual(UserSession.objects.filter(user=None).count(), 4)
+        last_session.user = self.user
+        last_session.save()
+        self.assertEqual(UserSession.objects.filter(user=None).count(), 0)
+
+    def test_set_parentage_stops_if_parent_user_is_not_none(self):
+        next_session = self.user_session
+        for i in range(3):
+            next_session = UserSession.objects.create(
+                session=Client().session.session_key,
+                previous=next_session,
+            )
+        self.user_session.user = get_user_model().objects.create(
+            username='user2',
+            )
+        self.user_session.save(set_parentage=False)
+        last_session = next_session
+        self.assertEqual(UserSession.objects.filter(user=None).count(), 3)
+        last_session.user = self.user
+        last_session.save()
+        self.assertEqual(UserSession.objects.filter(user=self.user).count(), 3)
