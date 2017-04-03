@@ -29,9 +29,6 @@ INSTALLED_APPS = (
     'djangae.contrib.contenttypes',
     'djangae.contrib.security',
 
-    'rest_framework',
-    'rest_framework.authtoken',
-
     'autometrics_nonrel',
 )
 
@@ -44,9 +41,3 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
-
-REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ),
-}
