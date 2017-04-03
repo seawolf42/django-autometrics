@@ -13,5 +13,5 @@ def access_entity(session, user, entity):
         session_key=session.session_key,
         user=user if user else None,
         action='access',
-        resource='{0}:{1}'.format(entity._meta.db_table, entity.pk),
+        resources=['{0}:{1}'.format(entity._meta.db_table, entity.pk)],
     )
