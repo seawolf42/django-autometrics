@@ -19,7 +19,7 @@ class DjangoTestAndLint(TestCommand):
     user_options = []
 
     def run_tests(self):
-        self._run(['flake8', 'autometricsnonrel', 'setup.py'])
+        self._run(['flake8', 'autometrics_nonrel', 'setup.py'])
         self._run(['python', 'manage.py', 'test'])
 
     def _run(self, command):

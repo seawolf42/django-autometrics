@@ -10,11 +10,11 @@ Some of the tools in this project assume you are running in a non-relational env
 Quick start
 -----------
 
-1. Add "autometricsnonrel" to your INSTALLED_APPS setting like this::
+1. Add "autometrics_nonrel" to your INSTALLED_APPS setting like this::
 
     INSTALLED_APPS = [
         ...
-        'autometricsnonrel',
+        'autometrics_nonrel',
     ]
 
 
@@ -22,6 +22,6 @@ TODO: finish setup steps
 
 2. Include the djangae_rest_autometrics URLconf in your project urls.py like this::
 
-    url(r'^metrics/', include('autometricsnonrel.urls')),
+    url(r'^metrics/', include('autometrics_nonrel.urls')),
 
 3. Visit http://127.0.0.1:8000/metrics/ to view ?.
