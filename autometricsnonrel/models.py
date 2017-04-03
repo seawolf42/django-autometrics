@@ -30,7 +30,8 @@ class Access(MetricsModel):
 
     action = models.CharField(max_length=100, blank=False, editable=False)
 
-    resources = ListField(models.CharField(max_length=500), editable=False)
+    model = models.CharField(max_length=50, blank=False, editable=False)
+    ids = ListField(models.IntegerField(editable=False))
 
 
 class UserSession(MetricsModel):

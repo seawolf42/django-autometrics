@@ -25,6 +25,7 @@ class AccessTest(TestCase):
             session_key='12345',
             user=self.user,
             action='action',
+            model='model',
             )
         self.time_after = datetime.datetime.now()
 
@@ -34,7 +35,8 @@ class AccessTest(TestCase):
         self.assertGreater(self.access.timestamp, self.time_before)
         self.assertLess(self.access.timestamp, self.time_after)
         self.assertIsNotNone(self.access.action)
-        self.assertEqual(len(self.access.resources), 0)
+        self.assertIsNotNone(self.access.model)
+        self.assertEqual(len(self.access.ids), 0)
 
     def test_properties(self):
         self.assertEquals(self.access.user_id, self.user.id)

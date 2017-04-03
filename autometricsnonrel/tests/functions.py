@@ -28,11 +28,9 @@ class AccessEntityTest(TestCase):
         self.assertEqual(access.session_key, self.session.session_key)
         self.assertEqual(access.user, expected_user)
         self.assertEqual(access.action, 'access')
-        self.assertEqual(len(access.resources), 1)
-        self.assertEqual(access.resources[0], '{0}:{1}'.format(
-            self.entity._meta.db_table,
-            self.entity.pk,
-            ))
+        self.assertEqual(access.model, self.entity._meta.db_table)
+        self.assertEqual(len(access.ids), 1)
+        self.assertEqual(access.ids[0], self.entity.pk)
 
     def test_access_entity(self):
         self.user = get_user_model().objects.create(username='user')
@@ -66,10 +64,9 @@ class ListEntityTest(TestCase):
         self.assertEqual(access.session_key, self.session.session_key)
         self.assertEqual(access.user, expected_user)
         self.assertEqual(access.action, 'list')
-        self.assertEqual(
-            access.resources,
-            ['{0}:{1}'.format(e._meta.db_table, e.pk) for e in self.entities],
-        )
+        self.assertEqual(access.model, self.entities[0]._meta.db_table)
+        self.assertEqual(len(access.ids), 3)
+        self.assertEqual(access.ids, [e.pk for e in self.entities])
 
     def test_list_entities(self):
         self.user = get_user_model().objects.create(username='user')
