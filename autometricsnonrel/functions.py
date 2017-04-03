@@ -23,6 +23,8 @@ def list_entities(session, user, entities):
         user = None
     if len(entities) == 0:
         return None
+    for e in entities[1:]:
+        assert(e.__class__ == entities[0].__class__)
     return Access.objects.create(
         timestamp=datetime.datetime.now(),
         session_key=session.session_key,

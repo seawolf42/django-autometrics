@@ -84,3 +84,8 @@ class ListEntityTest(TestCase):
         self.user = None
         list_entities(self.session, self.user, [])
         self.assertEqual(Access.objects.count(), 0)
+
+    def test_entites_must_all_be_same_type(self):
+        self.user = None
+        with self.assertRaises(AssertionError):
+            list_entities(self.session, self.user, self.entities + [object()])
