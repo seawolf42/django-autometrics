@@ -79,3 +79,8 @@ class ListEntityTest(TestCase):
     def test_list_entities_anon_user(self):
         self.user = AnonymousUser()
         self._test_list_state(None)
+
+    def test_list_no_entites_skips_save(self):
+        self.user = None
+        list_entities(self.session, self.user, [])
+        self.assertEqual(Access.objects.count(), 0)

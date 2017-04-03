@@ -21,6 +21,8 @@ def access_entity(session, user, entity):
 def list_entities(session, user, entities):
     if isinstance(user, AnonymousUser):
         user = None
+    if len(entities) == 0:
+        return None
     return Access.objects.create(
         timestamp=datetime.datetime.now(),
         session_key=session.session_key,
