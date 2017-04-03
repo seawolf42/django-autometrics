@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.signals import user_logged_in
 from django.db import models
 
+from djangae.fields import ListField
+
 import settings
 
 
@@ -26,9 +28,10 @@ class Access(MetricsModel):
     session_key = models.CharField(max_length=40, editable=False)
     user = models.ForeignKey(USER_MODEL, null=True, editable=False)
 
-    action = models.CharField(max_length=100, editable=False)
+    action = models.CharField(max_length=100, blank=False, editable=False)
 
-    resource = models.CharField(max_length=500, editable=False)
+    model = models.CharField(max_length=50, blank=False, editable=False)
+    ids = ListField(models.IntegerField(editable=False))
 
 
 class UserSession(MetricsModel):
