@@ -5,20 +5,20 @@ from django.contrib.auth.models import AnonymousUser
 from .models import Access
 
 
-def access_entity(session, user, entity):
+def get_entity(session, user, entity):
     if isinstance(user, AnonymousUser):
         user = None
     return Access.objects.create(
         timestamp=datetime.datetime.now(),
         session_key=session.session_key,
         user=user if user else None,
-        action='access',
+        action='get',
         model=entity._meta.db_table,
         ids=[entity.pk],
     )
 
 
-def list_entities(session, user, entities):
+def get_entity_list(session, user, entities):
     if isinstance(user, AnonymousUser):
         user = None
     if len(entities) == 0:
