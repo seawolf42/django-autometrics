@@ -15,3 +15,18 @@ def access_entity(session, user, entity):
         action='access',
         resources=['{0}:{1}'.format(entity._meta.db_table, entity.pk)],
     )
+
+
+def list_entities(session, user, entity_ids):
+    if isinstance(user, AnonymousUser):
+        user = None
+    return Access.objects.create(
+        timestamp=datetime.datetime.now(),
+        session_key=session.session_key,
+        user=user if user else None,
+        action='list',
+        resources=[
+            '{0}:{1}'.format(entity._meta.db_table, entity.pk)
+            for entity in entity_ids
+            ],
+    )

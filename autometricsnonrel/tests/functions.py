@@ -7,6 +7,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.test.client import Client
 
 from ..functions import access_entity
+from ..functions import list_entities
 
 from ..models import Access
 
@@ -44,3 +45,40 @@ class AccessEntityTest(TestCase):
     def test_access_entity_anon_user(self):
         self.user = AnonymousUser()
         self._test_access_state(None)
+
+
+class ListEntityTest(TestCase):
+
+    def setUp(self):
+        self.entities = [
+            get_user_model().objects.create(username='e{0}'.format(i + 1))
+            for i in range(3)
+        ]
+        self.session = Client().session
+
+    def _test_list_state(self, expected_user):
+        time_before = datetime.datetime.now()
+        list_entities(self.session, self.user, self.entities)
+        time_after = datetime.datetime.now()
+        self.assertEqual(Access.objects.count(), 1)
+        access = Access.objects.get()
+        self.assertTrue(time_before <= access.timestamp <= time_after)
+        self.assertEqual(access.session_key, self.session.session_key)
+        self.assertEqual(access.user, expected_user)
+        self.assertEqual(access.action, 'list')
+        self.assertEqual(
+            access.resources,
+            ['{0}:{1}'.format(e._meta.db_table, e.pk) for e in self.entities],
+        )
+
+    def test_list_entities(self):
+        self.user = get_user_model().objects.create(username='user')
+        self._test_list_state(self.user)
+
+    def test_list_entities_no_user(self):
+        self.user = None
+        self._test_list_state(None)
+
+    def test_list_entities_anon_user(self):
+        self.user = AnonymousUser()
+        self._test_list_state(None)
