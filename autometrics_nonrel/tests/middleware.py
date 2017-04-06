@@ -1,19 +1,14 @@
-from django.test import TestCase
-
-import logging
 import mock
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.signals import user_logged_in
 from django.test import RequestFactory
+from django.test import TestCase
 from django.test.client import Client
 
 from ..middleware import UserSessionTrackingMiddleware
 from ..models import UserSession
-
-
-log = logging.getLogger()
 
 
 class MockRequest():
