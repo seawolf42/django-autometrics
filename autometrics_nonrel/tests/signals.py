@@ -1,8 +1,7 @@
-from django.test import TestCase
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.signals import user_logged_in
 from django.test import RequestFactory
+from django.test import TestCase
 from django.test.client import Client
 
 from ..models import UserSession
