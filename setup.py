@@ -19,8 +19,15 @@ class DjangoTestAndLint(TestCommand):
     user_options = []
 
     def run_tests(self):
-        self._run(['flake8', 'autometrics_nonrel', 'setup.py'])
-        self._run(['python', 'manage.py', 'test'])
+        self._run([
+            'flake8',
+            'autometrics_nonrel',
+            'manage.py',
+            'settings.py',
+            'setup.py',
+            'wsgi.py',
+            ])
+        self._run(['python', 'manage.py', 'test', '-v 2'])
 
     def _run(self, command):
         try:
@@ -29,6 +36,11 @@ class DjangoTestAndLint(TestCommand):
             print('Command failed with exit code', error.returncode)
             sys.exit(error.returncode)
 
+
+install_dependencies = [
+    'Django>=1.8,<1.9',
+    'djangae==0.9.8',
+]
 
 setup(
     name='django-autometrics-nonrel',
@@ -52,11 +64,8 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Topic :: System :: Logging',
     ],
-    install_requires=[
-        'Django>=1.8,<1.9',
-        'djangae==0.9.8',
-    ],
-    tests_require=[
+    install_requires=install_dependencies,
+    tests_require=install_dependencies + [
         'flake8',
         'mock',
     ],
