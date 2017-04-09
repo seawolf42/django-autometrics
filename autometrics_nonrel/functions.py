@@ -1,7 +1,6 @@
 import datetime
 
 from django.contrib.auth.models import AnonymousUser
-from django.contrib.auth.models import models
 
 from .models import Access
 
