@@ -21,6 +21,14 @@ class MetricsModel(models.Model):
         abstract = True
 
 
+class AccessManager(models.Manager):
+
+    def filter(self, *args, **kwargs):
+        if 'ids__contains' in kwargs:
+            kwargs['ids__contains'] = str(kwargs['ids__contains'])
+        return super(AccessManager, self).filter(*args, **kwargs)
+
+
 class Access(MetricsModel):
 
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
@@ -31,7 +39,9 @@ class Access(MetricsModel):
     action = models.CharField(max_length=100, blank=False, editable=False)
 
     model = models.CharField(max_length=50, blank=False, editable=False)
-    ids = ListField(models.IntegerField(editable=False))
+    ids = ListField(models.CharField(max_length=100, editable=False))
+
+    objects = AccessManager()
 
 
 class UserSession(MetricsModel):

@@ -12,6 +12,28 @@ from ..models import Access
 from ..models import UserSession
 
 
+class AccessManagerTest(TestCase):
+
+    def setUp(self):
+        self.id = 123
+        Access.objects.create(
+            session_key='12345',
+            user=None,
+            action='action',
+            model='model',
+            ids=[self.id],
+            )
+        self.access = Access.objects.get()
+
+    def test_filter_converts_ids_to_strings(self):
+        id = self.id
+        self.assertEqual(Access.objects.filter(ids__contains=id).count(), 1)
+        self.assertEqual(
+            Access.objects.filter(ids__contains=str(self.id)).count(),
+            1,
+            )
+
+
 class AccessTest(TestCase):
 
     @classmethod
@@ -40,6 +62,13 @@ class AccessTest(TestCase):
 
     def test_properties(self):
         self.assertEquals(self.access.user_id, self.user.id)
+
+    def test_ids_are_strings(self):
+        id = 123
+        self.access.ids = [id]
+        self.access.save()
+        access = Access.objects.get()
+        self.assertEqual(access.ids[0], str(id))
 
     def test_session_key_is_not_nullable(self):
         self.access.session_key = None
