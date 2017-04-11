@@ -44,7 +44,7 @@ install_dependencies = [
 
 setup(
     name='django-autometrics-nonrel',
-    version='0.8',
+    version='0.9',
     packages=find_packages(),
     include_package_data=True,
     license='MIT License',
