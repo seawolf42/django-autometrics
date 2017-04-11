@@ -32,7 +32,7 @@ class AccessEntityTest(TestCase):
         self.assertEqual(access.action, 'get')
         self.assertEqual(access.model, self.entity._meta.db_table)
         self.assertEqual(len(access.ids), 1)
-        self.assertEqual(access.ids[0], self.entity.pk)
+        self.assertEqual(access.ids[0], str(self.entity.pk))
 
     def test_access_entity(self):
         self.user = get_user_model().objects.create(username='user')
@@ -71,7 +71,7 @@ class ListEntityIdTest(TestCase):
         self.assertEqual(access.action, 'list')
         self.assertEqual(access.model, self.entity_model)
         self.assertEqual(len(access.ids), 3)
-        self.assertEqual(access.ids, self.entity_ids)
+        self.assertEqual(access.ids, [str(id) for id in self.entity_ids])
 
     def test_list_entities(self):
         self.user = get_user_model().objects.create(username='user')
