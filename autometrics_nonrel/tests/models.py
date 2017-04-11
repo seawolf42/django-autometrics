@@ -41,6 +41,15 @@ class AccessTest(TestCase):
     def test_properties(self):
         self.assertEquals(self.access.user_id, self.user.id)
 
+    def test_ids_are_strings(self):
+        id = 123
+        self.access.ids = [id]
+        self.access.save()
+        self.assertEqual(len(Access.objects.filter(ids__contains=id)), 0)
+        self.assertEqual(len(Access.objects.filter(ids__contains=str(id))), 1)
+        access = Access.objects.get()
+        self.assertEqual(access.ids[0], str(id))
+
     def test_session_key_is_not_nullable(self):
         self.access.session_key = None
         with self.assertRaises(IntegrityError):
