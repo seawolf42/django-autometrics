@@ -19,7 +19,14 @@ class UserSessionTrackingMiddleware(object):
         if hasattr(request, 'user'):
             request_key = request.autometrics_key
             if request.session.session_key is None:
-                request.session.cycle_key()
+                try:
+                    request.session.cycle_key()
+                except Exception as e:
+                    log.critical(
+                        'unable to cycle null session key: %s',
+                        str(e),
+                        )
+                    return response
             response_key = request.session.session_key
             if request_key != response_key:
                 log.debug(

@@ -51,15 +51,15 @@ class UserSessionTrackingResponseTest(UserSessionTrackingMiddlewareBaseTest):
         self.request.session.cycle_key = mock.MagicMock(return_value=None)
         self.request.autometrics_key = self.session_key
 
-    def test_response_with_user_none_passes(self):
+    def test_response_with_user_none(self):
         del self.request.user
         self.middleware.process_response(self.request, None)
 
-    def test_response_with_anonymous_user_passes(self):
+    def test_response_with_anonymous_user(self):
         self.request.user = AnonymousUser()
         self.middleware.process_response(self.request, None)
 
-    def test_response_with_anonymous_user_and_changed_session_passes(self):
+    def test_response_with_anonymous_user_and_changed_session(self):
         self.request.user = AnonymousUser()
         self.request.autometrics_key = 'abc'
         self.middleware.process_response(self.request, None)
@@ -70,12 +70,22 @@ class UserSessionTrackingResponseTest(UserSessionTrackingMiddlewareBaseTest):
         self.middleware.process_response(self.request, None)
         self.request.session.cycle_key.assert_called_once()
 
-    def test_response_with_unchanged_session_passes(self):
+    def test_response_with_no_request_session_and_cannont_cycle_key(self):
+        self.request.session = mock.MagicMock()
+        self.request.session.session_key = None
+        self.request.session.cycle_key = mock.MagicMock(
+            side_effect=Exception(),
+            )
+        UserSession.objects.filter = mock.MagicMock()
+        self.middleware.process_response(self.request, None)
+        UserSession.objects.filter.assert_not_called()
+
+    def test_response_with_unchanged_session(self):
         self.request.autometrics_key = self.session_key
         self.middleware.process_response(self.request, None)
         self.request.session.cycle_key.assert_not_called()
 
-    def test_response_with_changed_session_passes(self):
+    def test_response_with_changed_session(self):
         UserSession.objects.create(session=self.session_key)
         self.request.autometrics_key = self.session_key[::-1]
         self.assertNotEqual(
