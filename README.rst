@@ -10,13 +10,13 @@ Some of the tools in this project assume you are running in a non-relational env
 Quick start
 -----------
 
-The easiest way to use `autometrics_nonrel` is to use the `RestFrameworkGenericViewSetAutoMetricsMixin` to provide built-in recording of user retrieval of entities:
+The easiest way to use `django-autometrics-nonrel` is to use the `RestFrameworkGenericViewSetAutoMetricsMixin` to provide built-in recording of user retrieval of entities:
 
-1. Add "autometrics_nonrel" to your `INSTALLED_APPS` setting like this::
+1. Add the project to your `INSTALLED_APPS` setting like this::
 
     INSTALLED_APPS = [
         ...
-        'autometrics_nonrel',
+        'django_autometrics_nonrel',
     ]
 
 1. Add the middleware to `MIDDLEWARE_CLASSES` anywhere **after** `SessionMiddleware`:
@@ -24,14 +24,14 @@ The easiest way to use `autometrics_nonrel` is to use the `RestFrameworkGenericV
     MIDDLEWARE_CLASSES = (
         ...
         'django.contrib.sessions.middleware.SessionMiddleware',
-        'autometrics_nonrel.middleware.UserSessionTrackingMiddleware',
+        'django_autometrics_nonrel.middleware.UserSessionTrackingMiddleware',
         ...
     )
 
 1. Use the mixin on your Django REST Framework GenericViewSet to automatically log user access to items:
 
     from rest_framework import viewsets
-    from autometrics_nonrel import mixins
+    from django_autometrics_nonrel import mixins
     from myapp.models import MyModel
     class MyViewSet(
             viewsets.ReadOnlyModelViewSet,
