@@ -44,15 +44,15 @@ install_dependencies = [
 
 setup(
     name='django-autometrics-nonrel',
-    version='0.9',
+    version='0.9.1.a1',
     packages=find_packages(),
     include_package_data=True,
     license='MIT License',
     description='A Django+Djangae app to collect session and access metrics.',
     long_description=README,
-    url='https://google.com/',
+    url='https://github.com/seawolf42/django-autometrics',
     author='jeffrey k eliasen',
-    author_email='jeff@jke.net',
+    author_email='jeff+django-autometrics@jke.net',
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
@@ -64,6 +64,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Topic :: System :: Logging',
     ],
+    keywords='django analytics',
     install_requires=install_dependencies,
     tests_require=install_dependencies + [
         'flake8',
