@@ -6,7 +6,7 @@ from .models import Access
 
 
 def get_entity(session, user, entity):
-    if isinstance(user, AnonymousUser):
+    if user.is_anonymous():
         user = None
     return Access.objects.create(
         timestamp=datetime.datetime.now(),
@@ -21,7 +21,7 @@ def get_entity(session, user, entity):
 def get_entity_id_list(session, user, model, ids):
     if len(ids) == 0:
         return None
-    if isinstance(user, AnonymousUser):
+    if user.is_anonymous():
         user = None
     return Access.objects.create(
         timestamp=datetime.datetime.now(),
