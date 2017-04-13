@@ -70,10 +70,9 @@ class AccessTest(TestCase):
         access = Access.objects.get()
         self.assertEqual(access.ids[0], str(id))
 
-    def test_session_key_is_not_nullable(self):
+    def test_session_key_is_nullable(self):
         self.access.session_key = None
-        with self.assertRaises(IntegrityError):
-            self.access.save()
+        self.access.save()
 
     def test_user_is_nullable(self):
         self.access.user = None
