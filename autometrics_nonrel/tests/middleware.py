@@ -70,6 +70,15 @@ class UserSessionTrackingResponseTest(UserSessionTrackingMiddlewareBaseTest):
         self.middleware.process_response(self.request, None)
         self.request.session.cycle_key.assert_called_once()
 
+    def test_response_with_no_request_session_key_logs_only_new_key(self):
+        import autometrics_nonrel.models as m
+        self.request.session = mock.MagicMock()
+        self.request.session.session_key = 'session'
+        self.request.autometrics_key = None
+        m.UserSession.objects.filter = mock.MagicMock()
+        self.middleware.process_response(self.request, None)
+        m.UserSession.objects.filter.assert_called_with(session='session')
+
     def test_response_with_no_request_session_and_cannont_cycle_key(self):
         self.request.session = mock.MagicMock()
         self.request.session.session_key = None
