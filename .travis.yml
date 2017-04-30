@@ -9,6 +9,7 @@ before_install:
   - popd
   - $HOME/google-cloud-sdk/install.sh --usage-reporting=true --path-update=true --bash-completion=true --rc-path=$HOME/.bashrc --additional-components app-engine-python
   - export PATH=$HOME/google-cloud-sdk/bin:$PATH
+  - export PYTHONPATH=$PYTHONPATH:$HOME/google-cloud-sdk/platform/google_appengine
 install:
   - pip install . flake8
 script:
