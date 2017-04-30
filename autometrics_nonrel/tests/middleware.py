@@ -17,13 +17,9 @@ class MockRequest():
 
 class UserSessionTrackingMiddlewareBaseTest(TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        super(UserSessionTrackingMiddlewareBaseTest, cls).setUpClass()
-        cls.middleware = UserSessionTrackingMiddleware()
-        cls.user = get_user_model().objects.create(username='user')
-
     def setUp(self):
+        self.middleware = UserSessionTrackingMiddleware()
+        self.user = get_user_model().objects.create(username='user')
         self.request = MockRequest()
         self.request.user = self.user
         self.session = Client().session
