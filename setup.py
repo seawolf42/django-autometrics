@@ -27,7 +27,6 @@ class DjangoTestAndLint(TestCommand):
             'setup.py',
             'wsgi.py',
             ])
-        self._run(['pip', 'install', 'Pillow'])
         self._run(['python', 'manage.py', 'test', '-v 2'])
 
     def _run(self, command):
@@ -41,6 +40,7 @@ class DjangoTestAndLint(TestCommand):
 install_dependencies = [
     'Django>=1.8,<1.9',
     'djangae==0.9.9',
+    'Pillow',
 ]
 
 setup(
