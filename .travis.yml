@@ -11,7 +11,6 @@ before_install:
   - export PATH=$HOME/google-cloud-sdk/bin:$PATH
 install:
   - pip install . flake8
-  - ln -s ~/virtualenv/python2.7/ .env
 script:
   - flake8 .
   - python manage.py test -v 2
