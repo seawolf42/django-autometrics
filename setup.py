@@ -27,6 +27,7 @@ class DjangoTestAndLint(TestCommand):
             'setup.py',
             'wsgi.py',
             ])
+        self._run(['pip', 'install', 'Pillow'])
         self._run(['python', 'manage.py', 'test', '-v 2'])
 
     def _run(self, command):
