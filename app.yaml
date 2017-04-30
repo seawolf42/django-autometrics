@@ -7,5 +7,5 @@ threadsafe: true
 
 handlers:
 - url: /.*
-  script: wsgi.application
+  script: manage.wsgi_application
   secure: always

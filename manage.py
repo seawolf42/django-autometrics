@@ -2,6 +2,9 @@ import os
 import sys
 
 
+wsgi_application = None
+
+
 if __name__ == "__main__":
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
     os.environ['DJANGAE_APP_YAML_LOCATION'] = os.path.abspath(
