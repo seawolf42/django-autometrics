@@ -8,7 +8,6 @@ RUN git checkout fix/test-command
 RUN mkdir -p /root/virtualenv
 RUN virtualenv /root/virtualenv/python2.7
 
-RUN ln -s /root/virtualenv/python2.7/ .env
 RUN /bin/bash -c "source .env/bin/activate && pip install . && pip install flake8"
 
 WORKDIR /root
