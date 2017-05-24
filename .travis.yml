@@ -3,7 +3,7 @@ python: "2.7"
 before_install:
   - sudo apt-get -qq install wget
   - pushd $HOME
-  - wget -O google-cloud-sdk.tgz https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-148.0.1-linux-x86_64.tar.gz
+  - wget -O google-cloud-sdk.tgz https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-154.0.1-linux-x86_64.tar.gz
   - tar -zxpf google-cloud-sdk.tgz
   - rm google-cloud-sdk.tgz
   - popd
