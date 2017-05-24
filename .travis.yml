@@ -11,6 +11,7 @@ before_install:
   - export PATH=$HOME/google-cloud-sdk/bin:$PATH
   - export PYTHONPATH=$PYTHONPATH:$HOME/google-cloud-sdk/platform/google_appengine
 install:
+  - pip install git+https://github.com/potatolondon/djangae.git@32bc836fa3a031ce943e8ff945ba86e3eb7366f1#egg=djangae==0.9.10a0
   - pip install . flake8
   - pip install Pillow
 script:
