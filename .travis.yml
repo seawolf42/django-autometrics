@@ -1,16 +1,17 @@
+sudo: false
 language: python
 python: "2.7"
+cache:
+  directories:
+  - "${HOME}/google-cloud-sdk/"
+env:
+  - PATH=${HOME}/google-cloud-sdk/bin:$PATH CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
-  - sudo apt-get -qq install wget
-  - pushd $HOME
-  - wget -O google-cloud-sdk.tgz https://storage.googleapis.com/cloud-sdk-release/google-cloud-sdk-137.0.1-linux-x86_64.tar.gz
-  - tar -zxpf google-cloud-sdk.tgz
-  - rm google-cloud-sdk.tgz
-  - popd
-  - $HOME/google-cloud-sdk/install.sh --usage-reporting=true --path-update=true --bash-completion=true --rc-path=$HOME/.bashrc --additional-components app-engine-python
-  - export PATH=$HOME/google-cloud-sdk/bin:$PATH
+  - if [ ! -d ${HOME}/google-cloud-sdk ]; then curl https://sdk.cloud.google.com | bash ; fi
+  - gcloud components update --version 137.0.0
+  - gcloud components install app-engine-python
 install:
-  - pip install . flake8
+  - pip install . flake8 funcsigs
 script:
   - flake8 .
   - python manage.py test -v 2
