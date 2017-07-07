@@ -39,7 +39,7 @@ class DjangoTestAndLint(TestCommand):
 
 install_dependencies = [
     'Django>=1.8,<1.9',
-    'djangae==0.9.8',
+    'djangae>=0.9.10',
 ]
 
 setup(

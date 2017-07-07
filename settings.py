@@ -34,7 +34,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'session_csrf.CsrfMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'autometrics_nonrel.middleware.UserSessionTrackingMiddleware',

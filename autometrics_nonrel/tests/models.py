@@ -36,12 +36,8 @@ class AccessManagerTest(TestCase):
 
 class AccessTest(TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        super(AccessTest, cls).setUpClass()
-        cls.user = get_user_model().objects.create(username='user')
-
     def setUp(self):
+        self.user = get_user_model().objects.create(username='user')
         self.time_before = datetime.datetime.now()
         self.access = Access.objects.create(
             session_key='12345',
