@@ -1,14 +1,11 @@
-==========================
-Django Autometrics Non-Rel
-==========================
+# Django Autometrics Non-Rel
 
 This package installs models and middleware used to simplify user tracking across sessions and correlate access to resources to the user requesting such access.
 
 Some of the tools in this project assume you are running in a non-relational environment (so far only Google App Engine is supported) for your views of interest. As such, the project depends on the `djangae` package. Some day perhaps I will split this into relational and non-relational sub-packages.
 
 
-Quick start
------------
+## Quick start
 
 The easiest way to use `django-autometrics-nonrel` is to use the `RestFrameworkGenericViewSetAutoMetricsMixin` to provide built-in recording of user retrieval of entities:
 
