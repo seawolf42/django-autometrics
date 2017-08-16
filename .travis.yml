@@ -13,7 +13,6 @@ before_install:
 install:
   - pip install djangae>=0.9.10
   - pip install . flake8 funcsigs
-  - pip install Pillow
 script:
   - flake8 .
   - python manage.py test -v 2

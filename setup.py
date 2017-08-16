@@ -39,7 +39,6 @@ class DjangoTestAndLint(TestCommand):
 
 install_dependencies = [
     'Django>=1.8,<1.9',
-    'Pillow',
     'djangae>=0.9.10',
 ]
 
@@ -66,7 +65,6 @@ setup(
         'Topic :: System :: Logging',
     ],
     keywords='django analytics',
-    dependency_links=['git+https://github.com/potatolondon/djangae/master/32bc836fa3a031ce943e8ff945ba86e3eb7366f1#egg=djangae-0.9.10a0'],  # noqa
     install_requires=install_dependencies,
     tests_require=install_dependencies + [
         'flake8',
