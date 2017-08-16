@@ -11,7 +11,7 @@ before_install:
   - gcloud components update
   - gcloud components install app-engine-python
 install:
-  - pip install git+https://github.com/potatolondon/djangae.git@32bc836fa3a031ce943e8ff945ba86e3eb7366f1#egg=djangae==0.9.10a0
+  - pip install djangae>=0.9.10
   - pip install . flake8 funcsigs
   - pip install Pillow
 script:
