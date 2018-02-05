@@ -13,24 +13,14 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 
-class DjangoTestAndLint(TestCommand):
+class DjangoTest(TestCommand):
 
     description = 'run linters and tests'
     user_options = []
 
     def run_tests(self):
-        self._run([
-            'flake8',
-            'autometrics_nonrel',
-            'manage.py',
-            'settings.py',
-            'setup.py',
-            ])
-        self._run(['python', 'manage.py', 'test', '-v 2'])
-
-    def _run(self, command):
         try:
-            subprocess.check_call(command)
+            subprocess.check_call(['python', 'manage.py', 'test', '-v 2'])
         except subprocess.CalledProcessError as error:
             print('Command failed with exit code', error.returncode)
             sys.exit(error.returncode)
@@ -70,6 +60,6 @@ setup(
         'mock',
     ],
     cmdclass={
-        'test': DjangoTestAndLint,
+        'test': DjangoTest,
     },
 )
