@@ -8,23 +8,24 @@ if sys.argv[1] == 'test':
     logging.disable(logging.CRITICAL)
 
 
-SECRET_KEY = 'gh30b@s+meh9fusgy_&wt=m-wxu!-e75icg-=0y2ywle4@0ees'
+SECRET_KEY = 'abcdefghijklmnopqrstuvwxyz'
 
-# Activate django-dbindexer for the default database
 DATABASES = {
     'default': {
         'ENGINE': 'djangae.db.backends.appengine'
     }
 }
 
+AUTH_USER_MODEL = 'gauth_datastore.GaeDatastoreUser'
+
 INSTALLED_APPS = (
     'djangae',
 
     'django.contrib.auth',
+    'djangae.contrib.gauth_datastore',
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.sessions',
-    'django.contrib.staticfiles',
 
     'djangae.contrib.contenttypes',
     'djangae.contrib.security',
@@ -38,6 +39,10 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'autometrics_nonrel.middleware.UserSessionTrackingMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'djangae.contrib.gauth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'djangae.contrib.gauth_datastore.backends.AppEngineUserAPIBackend',
 )
