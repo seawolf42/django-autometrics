@@ -8,7 +8,8 @@ if sys.argv[1] == 'test':
     logging.disable(logging.CRITICAL)
 
 
-SECRET_KEY = 'gh30b@s+meh9fusgy_&wt=m-wxu!-e75icg-=0y2ywle4@0ees'
+SECRET_KEY = 'abcdefghijklmnopqrstuvwxyz'
+
 
 # Activate django-dbindexer for the default database
 DATABASES = {
@@ -24,13 +25,13 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.sessions',
-    'django.contrib.staticfiles',
 
     'djangae.contrib.contenttypes',
     'djangae.contrib.security',
 
     'autometrics_nonrel',
 )
+
 
 MIDDLEWARE_CLASSES = (
     'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',

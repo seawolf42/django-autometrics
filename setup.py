@@ -25,7 +25,6 @@ class DjangoTestAndLint(TestCommand):
             'manage.py',
             'settings.py',
             'setup.py',
-            'wsgi.py',
             ])
         self._run(['python', 'manage.py', 'test', '-v 2'])
 
@@ -38,7 +37,7 @@ class DjangoTestAndLint(TestCommand):
 
 
 install_dependencies = [
-    'Django>=1.8,<1.9',
+    'Django>=1.8,<1.10',
     'djangae>=0.9.10',
 ]
 
