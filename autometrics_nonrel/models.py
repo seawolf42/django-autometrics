@@ -1,15 +1,13 @@
 import logging
 
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.auth.signals import user_logged_in
 from django.db import models
 
 from djangae.fields import ListField
 
-import settings
 
-
-USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', User)
+USER_MODEL = settings.AUTH_USER_MODEL
 
 log = logging.getLogger(__name__)
 
